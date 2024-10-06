@@ -33,8 +33,8 @@ class KeyboardSubscriber(Node):
     def listener_callback(self, msg):
         bin_string = bin(int(msg.data))[2:].zfill(4)
         self.kb_state['w'] = bin_string[0]
-        self.kb_state['s'] = bin_string[1]
-        self.kb_state['a'] = bin_string[2]
+        self.kb_state['s'] = bin_string[2]
+        self.kb_state['a'] = bin_string[1]
         self.kb_state['d'] = bin_string[3]
         self.get_logger().info('Keyboard: "%s"' % self.kb_state)
 
