@@ -1,0 +1,4 @@
+[console_scripts]
+driver = bbot.bbot_driver:main
+keyboard_subscriber = bbot.bbot_bot:main
+

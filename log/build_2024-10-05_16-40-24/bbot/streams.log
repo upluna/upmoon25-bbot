@@ -1,0 +1,38 @@
+[0.617s] Invoking command in '/home/z1mmer/Documents/robotics/upmoon25/src/bbot': PYTHONPATH=/home/z1mmer/Documents/robotics/upmoon25/build/bbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bbot build --build-base /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build install --record /home/z1mmer/Documents/robotics/upmoon25/build/bbot/install.log --single-version-externally-managed install_data
+[0.855s] running egg_info
+[0.855s] creating ../../build/bbot/bbot.egg-info
+[0.856s] writing ../../build/bbot/bbot.egg-info/PKG-INFO
+[0.856s] writing dependency_links to ../../build/bbot/bbot.egg-info/dependency_links.txt
+[0.856s] writing entry points to ../../build/bbot/bbot.egg-info/entry_points.txt
+[0.856s] writing requirements to ../../build/bbot/bbot.egg-info/requires.txt
+[0.856s] writing top-level names to ../../build/bbot/bbot.egg-info/top_level.txt
+[0.856s] writing manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+[0.857s] reading manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+[0.857s] adding license file 'LICENSE'
+[0.858s] writing manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+[0.858s] running build
+[0.858s] running build_py
+[0.858s] creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build
+[0.858s] creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib
+[0.858s] creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+[0.858s] copying bbot/publisher_member_function.py -> /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+[0.858s] copying bbot/__init__.py -> /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+[0.858s] running install
+[0.859s] running install_lib
+[0.859s] creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+[0.859s] copying /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot/publisher_member_function.py -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+[0.859s] copying /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot/__init__.py -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+[0.860s] byte-compiling /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+[0.860s] byte-compiling /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot/__init__.py to __init__.cpython-310.pyc
+[0.860s] running install_data
+[0.860s] creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index
+[0.860s] creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index
+[0.860s] creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index/packages
+[0.861s] copying resource/bbot -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index/packages
+[0.861s] copying package.xml -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/bbot
+[0.861s] running install_egg_info
+[0.862s] Copying ../../build/bbot/bbot.egg-info to /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot-0.0.0-py3.10.egg-info
+[0.863s] running install_scripts
+[0.882s] Installing talker script to /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/bbot
+[0.882s] writing list of installed files to '/home/z1mmer/Documents/robotics/upmoon25/build/bbot/install.log'
+[0.906s] Invoked command in '/home/z1mmer/Documents/robotics/upmoon25/src/bbot' returned '0': PYTHONPATH=/home/z1mmer/Documents/robotics/upmoon25/build/bbot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bbot build --build-base /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build install --record /home/z1mmer/Documents/robotics/upmoon25/build/bbot/install.log --single-version-externally-managed install_data

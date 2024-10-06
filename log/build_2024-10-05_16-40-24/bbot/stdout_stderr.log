@@ -1,0 +1,36 @@
+running egg_info
+creating ../../build/bbot/bbot.egg-info
+writing ../../build/bbot/bbot.egg-info/PKG-INFO
+writing dependency_links to ../../build/bbot/bbot.egg-info/dependency_links.txt
+writing entry points to ../../build/bbot/bbot.egg-info/entry_points.txt
+writing requirements to ../../build/bbot/bbot.egg-info/requires.txt
+writing top-level names to ../../build/bbot/bbot.egg-info/top_level.txt
+writing manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+reading manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/bbot/bbot.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build
+creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib
+creating /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+copying bbot/publisher_member_function.py -> /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+copying bbot/__init__.py -> /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot
+running install
+running install_lib
+creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+copying /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot/publisher_member_function.py -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+copying /home/z1mmer/Documents/robotics/upmoon25/build/bbot/build/lib/bbot/__init__.py -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot
+byte-compiling /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+byte-compiling /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index
+creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index
+creating /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index/packages
+copying resource/bbot -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/ament_index/resource_index/packages
+copying package.xml -> /home/z1mmer/Documents/robotics/upmoon25/install/bbot/share/bbot
+running install_egg_info
+Copying ../../build/bbot/bbot.egg-info to /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/python3.10/site-packages/bbot-0.0.0-py3.10.egg-info
+running install_scripts
+Installing talker script to /home/z1mmer/Documents/robotics/upmoon25/install/bbot/lib/bbot
+writing list of installed files to '/home/z1mmer/Documents/robotics/upmoon25/build/bbot/install.log'
