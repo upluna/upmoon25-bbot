@@ -59,7 +59,7 @@ class MinimalDriver(Node):
         # Keyboard data is published as a 4 digit binary in integer form, where each
         # digit represents w,s,a,d being down or up: for example,
         # 1011 -> w, a, d are down, s is up
-        msg = String()
+        msg = UInt8()
         msg.data = int(f'0b{self.w}{self.a}{self.s}{self.d}', 2)
         self.publisher_.publish(msg)
 
