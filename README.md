@@ -18,4 +18,4 @@ I plan on adding bash scripts to this repository to streamline this process. For
 - So, for example, if you wanted to run the `keyboard_subscriber` node on the Pi, which is in the `bbot` package, you would run
 	- `colcon build --packages-select bbot`
 	- `source install/local_setup.bash`
-	- `ros2 run package_name keyboard_subscriber`
+	- `ros2 run bbot keyboard_subscriber`
