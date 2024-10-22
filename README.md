@@ -6,7 +6,16 @@ This repository contains both the ROS2 code and a guide for connecting to and op
 - Now you can SSH into the Pi from your device:
 	- Acquire the Pi's IP address. The Pi is configured to use the static IP address `192.168.0.7` when connected to the the router. If It's not on the router, you'll have to acquire its IPV4 address by typing `iwconfig -a` into the console on the Pi.
 	- On Ubuntu, type `ssh upmoon25@192.168.0.7` into the console. The password is `upmoon25`. 
-	- On Windows, idk :( if someone could add to this that'd be great
+	- On Windows, you will have to do a series of steps; here's how:
+   		- Open up Windows Powershell and Run as Administrator
+		- You will need access to OpenSSH Client and OpenSSH Server:
+    			- It should pop up `PS C:\WINDOWS\system32` as the home directory
+  			- Type in `Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0`
+			- Type in `Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0`
+			- To check if both Client and Server are Present, type `Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH*'`
+			- After the Client and Server are present, we want to start and set the Service! Run `Start-Service sshd`, then `Set-Service -Name sshd -StartupType 'Automatic'`.
+			- We can check if the Service is running by typing `Get-Service sshd`!
+     		- Finally, type `ssh upmoon25@192.168.0.7` into powershell. The password is `upmoon25`.
 ### Running the code in this repository
 I plan on adding bash scripts to this repository to streamline this process. For now, the following instructions will work:
 - Ensure ROS2 Humble is installed on the machine you're running the code on. Of course, the Pi already has ROS2 Humble setup. There's an installation tutorial [here](https://docs.ros.org/en/humble/Installation.html). **Make sure your domain ID is set to 8888!** 
