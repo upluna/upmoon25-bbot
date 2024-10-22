@@ -4,8 +4,8 @@ This repository contains both the ROS2 code and a guide for connecting to and op
 ### Connecting to the Pi
 - Ensure that the Pi and your device are connected to the same network. This network must also be one in which the two devices can see (ping) each other. By default, the Pi contains a startup script which will automatically connect it to the router's network (SSID `Team36`, password `UPRobotics!`). 
 - Now you can SSH into the Pi from your device:
-	- Acquire the Pi's IP address. The Pi is configured to use the static IP address `127.0.0.1` when connected to the the router. If It's not on the router, you'll have to acquire its IPV4 address by typing `iwconfig -a` into the console on the Pi.
-	- On Ubuntu, type `ssh upmoon25@127.0.0.1` into the console. The password is `upmoon25`. 
+	- Acquire the Pi's IP address. The Pi is configured to use the static IP address `192.168.0.7` when connected to the the router. If It's not on the router, you'll have to acquire its IPV4 address by typing `iwconfig -a` into the console on the Pi.
+	- On Ubuntu, type `ssh upmoon25@192.168.0.7` into the console. The password is `upmoon25`. 
 	- On Windows, idk :( if someone could add to this that'd be great
 ### Running the code in this repository
 I plan on adding bash scripts to this repository to streamline this process. For now, the following instructions will work:
