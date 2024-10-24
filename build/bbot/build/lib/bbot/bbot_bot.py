@@ -14,32 +14,51 @@
 
 import rclpy
 from rclpy.node import Node
+from std_msgs.msg import String 
+from pysabertooth import Sabertooth
 
-from std_msgs.msg import UInt8
-
+saber = Sabertooth('/dev/ttyS0', baudrate=9600, address=128, timeout=0.1)
 
 class KeyboardSubscriber(Node):
 
     def __init__(self):
         super().__init__('keyboard_subscriber')
         self.subscription = self.create_subscription(
-            UInt8,
+            String,
             'keyboard',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
-        self.kb_state = {'w': '0', 's': '0', 'a': '0', 'd': '0'}
+        self.kb_state = {'w': '0', 's': '0', 'a': '0', 'd': '0', 'throttle' : 100}
+        self.get_logger().info('Successful initialization!')
 
     def listener_callback(self, msg):
-        bin_string = bin(int(msg.data))[2:].zfill(4)
-        self.kb_state['w'] = bin_string[0]
-        self.kb_state['s'] = bin_string[1]
-        self.kb_state['a'] = bin_string[2]
-        self.kb_state['d'] = bin_string[3]
+        #wasd:throttle
+        msg = msg.data
+        print(msg)
+        self.kb_state['w'] = msg[0]
+        self.kb_state['s'] = msg[1]
+        self.kb_state['a'] = msg[2]
+        self.kb_state['d'] = msg[3]
+        self.kb_state['throttle'] = int(msg[5:])
+
+        if (self.kb_state['w'] == '1'):
+            saber.drive(1, self.kb_state['throttle'])
+            saber.drive(2, -self.kb_state['throttle'])
+            self.get_logger().info("Forward")
+        elif (self.kb_state['s'] == '1'):
+            saber.drive(1, -self.kb_state['throttle'])
+            saber.drive(2, self.kb_state['throttle'])
+            self.get_logger().info("Backward")
+        else:
+            saber.stop()
+            self.get_logger().info("Pin off")
+
         self.get_logger().info('Keyboard: "%s"' % self.kb_state)
 
 
 def main(args=None):
+    
     rclpy.init(args=args)
 
     keyboard_subscriber = KeyboardSubscriber()
