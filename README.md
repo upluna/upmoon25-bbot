@@ -16,6 +16,7 @@ This repository contains both the ROS2 code and a guide for connecting to and op
 			- After the Client and Server are present, we want to start and set the Service! Run `Start-Service sshd`, then `Set-Service -Name sshd -StartupType 'Automatic'`.
 			- We can check if the Service is running by typing `Get-Service sshd`!
      		- Finally, type `ssh upmoon25@192.168.0.7` into powershell. The password is `upmoon25`.
+       - On Mac/OS, there's already SSH preinstalled: type `ssh upmoon25@192.168.0.7` into the console. The password is `upmoon25`.
 ### Running the code in this repository
 I plan on adding bash scripts to this repository to streamline this process. For now, the following instructions will work:
 - Ensure ROS2 Humble is installed on the machine you're running the code on. Of course, the Pi already has ROS2 Humble setup. There's an installation tutorial [here](https://docs.ros.org/en/humble/Installation.html). **Make sure your domain ID is set to 8888!** 
