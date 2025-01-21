@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
 			'driver = bbot.bbot_driver:main',
-            'keyboard_subscriber = bbot.bbot_bot:main'
+            'bbot_receiver_kb = bbot.bbot_receiver_kb:main',
+            'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },
 )
