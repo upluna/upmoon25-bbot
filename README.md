@@ -24,7 +24,7 @@ I plan on adding bash scripts to this repository to streamline this process. For
 	- `colcon build --packages-select package_name`
 	- `source install/local_setup.bash`
 	- `ros2 run package_name node_name`
-- So, for example, if you wanted to run the `keyboard_subscriber` node on the Pi, which is in the `bbot` package, you would run
+- So, for example, if you wanted to run the `bbot_receiver_kb` node on the Pi, which is in the `bbot` package, you would run
 	- `colcon build --packages-select bbot`
 	- `source install/local_setup.bash`
-	- `ros2 run bbot keyboard_subscriber`
+	- `ros2 run bbot bbot_receiver_kb`
