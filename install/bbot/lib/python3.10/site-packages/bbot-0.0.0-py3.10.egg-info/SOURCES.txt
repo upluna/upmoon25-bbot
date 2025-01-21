@@ -12,6 +12,7 @@ setup.py
 bbot/__init__.py
 bbot/bbot_bot.py
 bbot/bbot_driver.py
+bbot/joystick_driver.py
 resource/bbot
 test/test_copyright.py
 test/test_flake8.py
