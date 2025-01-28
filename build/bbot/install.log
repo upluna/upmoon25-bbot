@@ -1,10 +1,8 @@
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/joystick_driver.py
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/bbot_driver.py
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/bbot_bot.py
+/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/keyboard_driver.py
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__init__.py
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__pycache__/joystick_driver.cpython-310.pyc
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__pycache__/bbot_driver.cpython-310.pyc
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__pycache__/bbot_bot.cpython-310.pyc
+/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__pycache__/keyboard_driver.cpython-310.pyc
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot/__pycache__/__init__.cpython-310.pyc
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/share/ament_index/resource_index/packages/bbot
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/share/bbot/package.xml
@@ -17,5 +15,3 @@
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/python3.10/site-packages/bbot-0.0.0-py3.10.egg-info/requires.txt
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/bbot/bbot_driver_js
 /home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/bbot/bbot_driver_kb
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/bbot/joystick_subscriber
-/home/z1mmer/Documents/robotics/upmoon25-bbot/install/bbot/lib/bbot/keyboard_subscriber

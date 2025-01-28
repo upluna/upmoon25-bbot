@@ -19,7 +19,7 @@ from rclpy.node import Node
 
 from pygame.locals import *
 
-from std_msgs.msg import UInt8
+from std_msgs.msg import String
 
 class MinimalDriver(Node):
 
@@ -29,21 +29,35 @@ class MinimalDriver(Node):
         # How frequently pygame should be polled
         self.clk = 0.01
 
-        self.publisher_ = self.create_publisher(UInt8, 'keyboard', 10)
+        self.publisher_ = self.create_publisher(String, 'keyboard', 10)
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
 
         pygame.init()
-        pygame.display.set_mode((300, 300))
+        pygame.font.init()
+        self.font = pygame.font.SysFont('Arial', 30)	
+
+        self.screen = pygame.display.set_mode((300, 300))
         pygame.display.set_caption('bbot driver')
 
+        self.throttle = 100
         self.w = 0
         self.s = 0
         self.a = 0
         self.d = 0
 
         self.FPS = 60
+
+        self.updateThrottleText()
+
+        self.get_logger().info("Succesful initialization")
+
+    def updateThrottleText(self):
+        text_surface = self.font.render(f'Throttle: {self.throttle}', False, (255, 255, 255))
+        self.screen.fill((0,0,0))
+        self.screen.blit(text_surface, (0,0)) 
+
 
     # Helper method for pollEvents
     def setKeys(self, key, val):
@@ -55,12 +69,23 @@ class MinimalDriver(Node):
             self.a = val
         if (key == 100):
             self.d = val
+        if (key == 101 and val == 1):
+            self.throttle += 10
+            if (self.throttle > 100):
+                self.throttle = 100
+            self.updateThrottleText()
+        if (key == 113 and val == 1):
+            self.throttle -= 10
+            if (self.throttle < 0):
+                self.throttle = 0
+            self.updateThrottleText()
+
         
         # Keyboard data is published as a 4 digit binary in integer form, where each
         # digit represents w,s,a,d being down or up: for example,
         # 1011 -> w, a, d are down, s is up
-        msg = UInt8()
-        msg.data = int(f'0b{self.w}{self.a}{self.s}{self.d}', 2)
+        msg = String()
+        msg.data = f'{self.w}{self.s}{self.a}{self.d}:{self.throttle}'
         self.publisher_.publish(msg)
 
 

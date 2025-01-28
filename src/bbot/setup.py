@@ -20,10 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-			'bbot_driver_kb = bbot.bbot_driver:main',
-            'bbot_driver_js = bbot.joystick_driver:main',
-            'keyboard_subscriber = bbot.bbot_bot:main',
-            'joystick_subscriber = bbot.joystick_subscriber:main'
+			'bbot_driver_kb = bbot.keyboard_driver:main',
+            'bbot_driver_js = bbot.joystick_driver:main'
         ],
     },
 )
