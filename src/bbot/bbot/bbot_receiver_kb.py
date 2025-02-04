@@ -17,24 +17,27 @@ from rclpy.node import Node
 from std_msgs.msg import String 
 from pysabertooth import Sabertooth
 
-saber = Sabertooth('/dev/ttyS0', baudrate=9600, address=128, timeout=0.1)
+saber = Sabertooth('/dev/ttyACM0', baudrate=9600, address=128, timeout=0.1)
+saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1)
+
 
 class KeyboardSubscriber(Node):
 
     def __init__(self):
-        super().__init__('bbot_receiver_kb')
+        super().__init__('keyboard_subscriber')
         self.subscription = self.create_subscription(
             String,
-            '/keyboard',
+            'keyboard',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
         self.kb_state = {'w': '0', 's': '0', 'a': '0', 'd': '0', 'throttle' : 100}
         self.get_logger().info('Successful initialization!')
 
-    def listener_callback(self, msg): 
+    def listener_callback(self, msg):
         #wasd:throttle
         msg = msg.data
+        print(msg)
         self.kb_state['w'] = msg[0]
         self.kb_state['s'] = msg[1]
         self.kb_state['a'] = msg[2]
@@ -42,15 +45,37 @@ class KeyboardSubscriber(Node):
         self.kb_state['throttle'] = int(msg[5:])
 
         if (self.kb_state['w'] == '1'):
-            saber.drive(1, self.kb_state['throttle'])
-            saber.drive(2, -self.kb_state['throttle'])
+
+            t1 = self.kb_state['throttle']
+            t2 = self.kb_state['throttle']
+
+            if (self.kb_state['a'] == '1'):
+                t2 = int(t2 * 0.5)
+            elif (self.kb_state['d'] == '1'):
+                t1 = int(t2 * 0.5)
+
+            saber.drive(1, t1)
+            saber.drive(2, -t1)
+            saber2.drive(1, t2)
+            saber2.drive(2, -t2)
             self.get_logger().info("Forward")
         elif (self.kb_state['s'] == '1'):
             saber.drive(1, -self.kb_state['throttle'])
             saber.drive(2, self.kb_state['throttle'])
+            saber2.drive(1, -self.kb_state['throttle'])
+            saber2.drive(2, self.kb_state['throttle'])
+
             self.get_logger().info("Backward")
+        elif (self.kb_state['a'] == '1'):
+            saber.drive(1, -self.kb_state['throttle'])
+            saber.drive(2, self.kb_state['throttle'])
+        elif (self.kb_state['d'] == '1'):
+            saber2.drive(1, -self.kb_state['throttle'])
+            saber2.drive(2, self.kb_state['throttle'])
+
         else:
             saber.stop()
+            saber2.stop()
             self.get_logger().info("Pin off")
 
         self.get_logger().info('Keyboard: "%s"' % self.kb_state)
@@ -73,4 +98,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
