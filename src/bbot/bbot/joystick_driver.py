@@ -19,7 +19,8 @@ from rclpy.node import Node
 
 from pygame.locals import *
 
-from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Float64, Int16
 
 class JoystickDriver(Node):
 
@@ -29,7 +30,11 @@ class JoystickDriver(Node):
         # How frequently pygame should be polled
         self.clk = 0.01
 
-        self.publisher_ = self.create_publisher(String, 'joystick', 10)
+        self.velocity_pub = self.create_publisher(Twist, 'cmd/velocity', 10)
+        self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10)
+        self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
+        self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10)
+        self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
@@ -44,7 +49,7 @@ class JoystickDriver(Node):
 
         self.FPS = 25
 
-    # Publishes keyboard inputs
+    # Publishes joystick inputs
     def pollEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -61,9 +66,10 @@ class JoystickDriver(Node):
             rotation = 0
 
         # Publish joystick data
-        msg = String()
-        msg.data = f'{throttle},{rotation}'
-        self.publisher_.publish(msg)
+        msg = Twist()
+        msg.linear.x = throttle
+        msg.angular.z = rotation
+        self.velocity_pub.publish(msg)
 
         pygame.display.update()
         pygame.time.Clock().tick(self.FPS)
