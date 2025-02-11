@@ -47,7 +47,7 @@ class MinimalDriver(Node):
         self.screen = pygame.display.set_mode((300, 300))
         pygame.display.set_caption('bbot driver')
 
-        self.throttle = 100
+        self.throttle = 100.0
 
         self.FPS = 60
 
@@ -72,18 +72,18 @@ class MinimalDriver(Node):
             velocity_msg.linear.x = -self.throttle # set the throttle to negative
             self.s = val
         if (key == 97): # a
-            velocity_msg.angular.z = -1 # negative value indicates a left turn
+            velocity_msg.angular.z = -1.0 # negative value indicates a left turn
             self.a = val
         if (key == 100): # d
-            velocity_msg.angular.z = 1 # positive value indicates a right turn
+            velocity_msg.angular.z = 1.0 # positive value indicates a right turn
             self.d = val
         if (key == 101 and val == 1):
-            self.throttle += 10
-            if (self.throttle > 100):
-                self.throttle = 100
+            self.throttle += 10.0
+            if (self.throttle > 100.0):
+                self.throttle = 100.0
             self.updateThrottleText()
         if (key == 113 and val == 1):
-            self.throttle -= 10
+            self.throttle -= 10.0
             if (self.throttle < 0):
                 self.throttle = 0
             self.updateThrottleText()
