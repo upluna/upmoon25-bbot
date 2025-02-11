@@ -44,9 +44,9 @@ class DriveMotors(Node):
             t1 = throttle
             t2 = throttle
 
-            if (rotation < 0): # left turn
+            if (rotation < 0.0): # left turn
                 t2 = int(t2 * 0.5)
-            elif (rotation > 0): # right turn
+            elif (rotation > 0.0): # right turn
                 t1 = int(t2 * 0.5)
 
             saber.drive(1, t1)
@@ -54,17 +54,17 @@ class DriveMotors(Node):
             saber2.drive(1, t2)
             saber2.drive(2, -t2)
             self.get_logger().info("Forward")
-        elif (throttle > 0):
+        elif (throttle > 0.0):
             saber.drive(1, -throttle)
             saber.drive(2, self.kb_state['throttle'])
             saber2.drive(1, -self.kb_state['throttle'])
             saber2.drive(2, self.kb_state['throttle'])
 
             self.get_logger().info("Backward")
-        elif (rotation < 0): # left
+        elif (rotation < 0.0): # left
             saber.drive(1, -throttle)
             saber.drive(2, throttle)
-        elif (rotation > 0): # right
+        elif (rotation > 0.0): # right
             saber2.drive(1, -throttle)
             saber2.drive(2, throttle)
 
