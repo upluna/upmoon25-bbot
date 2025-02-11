@@ -65,28 +65,28 @@ class MinimalDriver(Node):
     def setKeys(self, key, val):
         velocity_msg = Twist()
 
-        if (key == 119): # w
-            velocity_msg.linear.x = self.throttle # set the direction to positive
-            self.w = val
-        if (key == 115): # s
-            velocity_msg.linear.x = -self.throttle # set the throttle to negative
-            self.s = val
-        if (key == 97): # a
-            velocity_msg.angular.z = -1.0 # negative value indicates a left turn
-            self.a = val
-        if (key == 100): # d
-            velocity_msg.angular.z = 1.0 # positive value indicates a right turn
-            self.d = val
-        if (key == 101 and val == 1):
-            self.throttle += 10.0
-            if (self.throttle > 100.0):
-                self.throttle = 100.0
-            self.updateThrottleText()
-        if (key == 113 and val == 1):
-            self.throttle -= 10.0
-            if (self.throttle < 0):
-                self.throttle = 0
-            self.updateThrottleText()
+        if (val == 0):
+            velocity_msg.linear.x = 0.0
+            velocity_msg.angular.z = 0.0
+        else:
+            if (key == 119): # w
+                velocity_msg.linear.x = self.throttle # set the direction to positive
+            if (key == 115): # s
+                velocity_msg.linear.x = -self.throttle # set the throttle to negative
+            if (key == 97): # a
+                velocity_msg.angular.z = -1.0 # negative value indicates a left turn
+            if (key == 100): # d
+                velocity_msg.angular.z = 1.0 # positive value indicates a right turn
+            if (key == 101):
+                self.throttle += 10.0
+                if (self.throttle > 100.0):
+                    self.throttle = 100.0
+                self.updateThrottleText()
+            if (key == 113):
+                self.throttle -= 10.0
+                if (self.throttle < 0):
+                    self.throttle = 0
+                self.updateThrottleText()
 
         # Velocity data is published as a twist object. The linear x component represents throttle (+/- = forward/backward)
         # The angular z component represents turning (+/- = right/left, 0 = no turn). Turning speed is constant regardless of z magnitude
