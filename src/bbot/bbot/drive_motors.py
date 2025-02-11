@@ -56,9 +56,9 @@ class DriveMotors(Node):
             self.get_logger().info("Forward")
         elif (throttle < 0.0):
             saber.drive(1, -throttle)
-            saber.drive(2, self.kb_state['throttle'])
-            saber2.drive(1, -self.kb_state['throttle'])
-            saber2.drive(2, self.kb_state['throttle'])
+            saber.drive(2, throttle)
+            saber2.drive(1, -throttle)
+            saber2.drive(2, throttle)
 
             self.get_logger().info("Backward")
         elif (rotation < 0.0): # left
