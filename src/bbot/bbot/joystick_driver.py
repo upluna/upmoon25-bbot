@@ -28,7 +28,7 @@ class JoystickDriver(Node):
         super().__init__('joystick_driver')
 
         # How frequently pygame should be polled
-        self.clk = 0.01
+        self.clk = 0.1
 
         self.velocity_pub = self.create_publisher(Twist, 'cmd/velocity', 10)
         self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10)
@@ -57,13 +57,13 @@ class JoystickDriver(Node):
                 rclpy.shutdown()
                 pygame.quit()
 
-        throttle = round(-100 * self.controller.get_axis(1))
+        throttle = -100 * self.controller.get_axis(1)
         if (throttle <= 5 and throttle >= -5):
-            throttle = 0
+            throttle = 0.0
         
-        rotation = round(100 * self.controller.get_axis(3))
+        rotation = 100 * self.controller.get_axis(3)
         if (rotation <= 5 and rotation >= -5):
-            rotation = 0
+            rotation = 0.0
 
         # Publish joystick data
         msg = Twist()
