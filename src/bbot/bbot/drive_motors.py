@@ -39,8 +39,12 @@ class DriveMotors(Node):
         throttle = msg.linear.x
         rotation = msg.angular.z
 
-        if (throttle > 0.0):
-
+        if (throttle != 0.0 and rotation == 0.0):
+            saber.drive(1, throttle)
+            saber.drive(2, -throttle)
+            saber2.drive(1, throttle)
+            saber2.drive(2, -throttle)
+        elif (throttle != 0.0 and rotation != 0.0):
             t1 = throttle
             t2 = throttle
 
@@ -53,26 +57,17 @@ class DriveMotors(Node):
             saber.drive(2, -t1)
             saber2.drive(1, t2)
             saber2.drive(2, -t2)
-            self.get_logger().info("Forward")
-        elif (throttle < 0.0):
-            saber.drive(1, throttle)
-            saber.drive(2, -throttle)
-            saber2.drive(1, throttle)
-            saber2.drive(2, -throttle)
-
-            self.get_logger().info("Backward")
-        elif (rotation < 0.0): # left
-            saber.drive(1, -throttle)
-            saber.drive(2, throttle)
-        elif (rotation > 0.0): # right
-            saber2.drive(1, -throttle)
-            saber2.drive(2, throttle)
-
+        elif (throttle == 0.0 and rotation != 0.0):
+            if (rotation < 0.0): # left turn
+                saber2.drive(1, 40.0)
+                saber2.drive(2, -40.0)
+            elif (rotation > 0.0): # right turn
+                saber.drive(1, 40.0)
+                saber.drive(2, -40.0)
         else:
             saber.stop()
             saber2.stop()
             self.get_logger().info("Stopped")
-
 
 
 def main(args=None):
