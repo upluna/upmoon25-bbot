@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
 			'driver = bbot.bbot_driver:main',
             'drive_motors = bbot.drive_motors:main',
+            'conveyor = bbot.conveyor:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },

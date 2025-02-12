@@ -20,6 +20,7 @@ from pysabertooth import Sabertooth
 saber = Sabertooth('/dev/ttyACM0', baudrate=9600, address=128, timeout=0.1) #left wheels
 saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
 
+TURN_SPEED = 50.0
 
 class DriveMotors(Node):
 
@@ -59,11 +60,15 @@ class DriveMotors(Node):
             saber2.drive(2, -t2)
         elif (throttle == 0.0 and rotation != 0.0):
             if (rotation < 0.0): # left turn
-                saber2.drive(1, 40.0)
-                saber2.drive(2, -40.0)
+                saber2.drive(1, -TURN_SPEED)
+                saber2.drive(2, TURN_SPEED)
+                saber.drive(1, TURN_SPEED)
+                saber.drive(2, -TURN_SPEED)
             elif (rotation > 0.0): # right turn
-                saber.drive(1, 40.0)
-                saber.drive(2, -40.0)
+                saber.drive(1, -TURN_SPEED)
+                saber.drive(2, TURN_SPEED)
+                saber2.drive(1, TURN_SPEED)
+                saber2.drive(2, -TURN_SPEED)
         else:
             saber.stop()
             saber2.stop()

@@ -24,8 +24,11 @@ class Conveyor(Node):
         self.get_logger().info('GPIO Controller Node Initialized')
 
     def sub_callback(self, msg):
-        GPIO.output(self.gpio_pin, msg.data)
-        self.get_logger().info(f'Turning conveyor ({self.gpio_pin}) {"ON" if (msg.data == 0) else "OFF"}')
+        if (msg.data == 1):
+            GPIO.output(self.gpio_pin, GPIO.LOW)
+        else:
+            GPIO.output(self.gpio_pin, GPIO.HIGH)
+        self.get_logger().info(f'Turning conveyor ({self.gpio_pin}) {"ON" if (msg.data == 1) else "OFF"}')
 
     def destroy_node(self):
         GPIO.cleanup()
