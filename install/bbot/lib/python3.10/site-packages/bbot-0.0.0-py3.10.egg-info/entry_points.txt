@@ -1,5 +1,0 @@
-[console_scripts]
-bbot_receiver_js = bbot.bbot_receiver_js:main
-bbot_receiver_kb = bbot.bbot_receiver_kb:main
-driver = bbot.bbot_driver:main
-

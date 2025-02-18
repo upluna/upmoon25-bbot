@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
 			'driver = bbot.bbot_driver:main',
-            'bbot_receiver_kb = bbot.bbot_receiver_kb:main',
+            'drive_motors = bbot.drive_motors:main',
+            'conveyor = bbot.conveyor:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },
