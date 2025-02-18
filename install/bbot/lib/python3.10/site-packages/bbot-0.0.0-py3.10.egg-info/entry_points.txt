@@ -1,4 +1,0 @@
-[console_scripts]
-bbot_driver_js = bbot.joystick_driver:main
-bbot_driver_kb = bbot.keyboard_driver:main
-

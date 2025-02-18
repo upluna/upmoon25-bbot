@@ -19,7 +19,9 @@ from rclpy.node import Node
 
 from pygame.locals import *
 
-from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Int16
+
 
 class MinimalDriver(Node):
 
@@ -29,7 +31,11 @@ class MinimalDriver(Node):
         # How frequently pygame should be polled
         self.clk = 0.01
 
-        self.publisher_ = self.create_publisher(String, 'keyboard', 10)
+        self.velocity_pub = self.create_publisher(Twist, 'cmd/velocity', 10)
+        self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10)
+        self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
+        self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10)
+        self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
@@ -41,11 +47,7 @@ class MinimalDriver(Node):
         self.screen = pygame.display.set_mode((300, 300))
         pygame.display.set_caption('bbot driver')
 
-        self.throttle = 100
-        self.w = 0
-        self.s = 0
-        self.a = 0
-        self.d = 0
+        self.throttle = 100.0
 
         self.FPS = 60
 
@@ -61,32 +63,36 @@ class MinimalDriver(Node):
 
     # Helper method for pollEvents
     def setKeys(self, key, val):
-        if (key == 119):
-            self.w = val
-        if (key == 115):
-            self.s = val
-        if (key == 97):
-            self.a = val
-        if (key == 100):
-            self.d = val
-        if (key == 101 and val == 1):
-            self.throttle += 10
-            if (self.throttle > 100):
-                self.throttle = 100
-            self.updateThrottleText()
-        if (key == 113 and val == 1):
-            self.throttle -= 10
-            if (self.throttle < 0):
-                self.throttle = 0
-            self.updateThrottleText()
+        velocity_msg = Twist()
 
-        
-        # Keyboard data is published as a 4 digit binary in integer form, where each
-        # digit represents w,s,a,d being down or up: for example,
-        # 1011 -> w, a, d are down, s is up
-        msg = String()
-        msg.data = f'{self.w}{self.s}{self.a}{self.d}:{self.throttle}'
-        self.publisher_.publish(msg)
+        if (val == 0):
+            velocity_msg.linear.x = 0.0
+            velocity_msg.angular.z = 0.0
+        else:
+            if (key == 119): # w
+                velocity_msg.linear.x = self.throttle # set the direction to positive
+            if (key == 115): # s
+                velocity_msg.linear.x = -self.throttle # set the throttle to negative
+            if (key == 97): # a
+                velocity_msg.angular.z = -1.0 # negative value indicates a left turn
+                velocity_msg.linear.x = self.throttle # set the direction to positive
+            if (key == 100): # d
+                velocity_msg.angular.z = 1.0 # positive value indicates a right turn
+                velocity_msg.linear.x = self.throttle # set the direction to positive
+            if (key == 101):
+                self.throttle += 10.0
+                if (self.throttle > 100.0):
+                    self.throttle = 100.0
+                self.updateThrottleText()
+            if (key == 113):
+                self.throttle -= 10.0
+                if (self.throttle < 0):
+                    self.throttle = 0
+                self.updateThrottleText()
+
+        # Velocity data is published as a twist object. The linear x component represents throttle (+/- = forward/backward)
+        # The angular z component represents turning (+/- = right/left, 0 = no turn). Turning speed is constant regardless of z magnitude
+        self.velocity_pub.publish(velocity_msg)
 
 
     # Publishes keyboard inputs
