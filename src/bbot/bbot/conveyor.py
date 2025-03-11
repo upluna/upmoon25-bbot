@@ -9,7 +9,7 @@ class Conveyor(Node):
 
         # Set GPIO pin number (BCM numbering)
         self.gpio_pin = 18  
-        GPIO.setmode(GPIO.BCM)
+        GPIO.setmode(GPIO.BCM) #research on this GPIO
         GPIO.setup(self.gpio_pin, GPIO.OUT)
 
         GPIO.output(self.gpio_pin, GPIO.HIGH)
