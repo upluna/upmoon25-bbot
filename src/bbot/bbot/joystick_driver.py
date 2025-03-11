@@ -57,6 +57,7 @@ class JoystickDriver(Node):
         self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
         self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10)
         self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
+        self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10)
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
