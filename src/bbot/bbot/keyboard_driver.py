@@ -36,6 +36,8 @@ class MinimalDriver(Node):
         self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
         self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10)
         self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
+        self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10)
+        self.camera_pan_pub = self.create_publisher(Int16, 'cmd/camera_pan', 10)
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
@@ -64,6 +66,7 @@ class MinimalDriver(Node):
     # Helper method for pollEvents
     def setKeys(self, key, val):
         velocity_msg = Twist()
+        conveyor_msg = Int16()
 
         if (val == 0):
             velocity_msg.linear.x = 0.0
@@ -89,6 +92,14 @@ class MinimalDriver(Node):
                 if (self.throttle < 0):
                     self.throttle = 0
                 self.updateThrottleText()
+
+            #this is for conveyor:
+            if (key == 107): #k - this starts conveyor, sends a 1 as msg.data
+                conveyor_msg.data = 1
+            if (key == 108): #l - stop conveyor, sends a 0 as msg.data
+                conveyor_msg.data = 0
+
+        self.conveyor_pub.publish(conveyor_msg)
 
         # Velocity data is published as a twist object. The linear x component represents throttle (+/- = forward/backward)
         # The angular z component represents turning (+/- = right/left, 0 = no turn). Turning speed is constant regardless of z magnitude
