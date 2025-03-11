@@ -51,6 +51,7 @@ class JoystickDriver(Node):
         # How frequently pygame should be polled
         self.clk = 0.1
 
+        #topics
         self.velocity_pub = self.create_publisher(Twist, 'cmd/velocity', 10)
         self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10)
         self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
