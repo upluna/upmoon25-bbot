@@ -9,7 +9,7 @@ class CameraHeight(Node):
     def __init__(self):
         super().__init__('camera_height')
 
-        self.gpio_pin = 40 # pin 40 is a PWM pin, rever to PWM_pins.txt
+        self.gpio_pin = 40 # pin 40 is a PWM pin, refer to PWM_pins.txt
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.gpio_pin, GPIO.OUT)
 
