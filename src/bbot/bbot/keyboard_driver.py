@@ -32,11 +32,11 @@ class MinimalDriver(Node):
         self.clk = 0.01
 
         self.velocity_pub = self.create_publisher(Twist, 'cmd/velocity', 10)
-        self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10)
-        self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10)
-        self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10)
-        self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
-        self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10)
+        self.conveyor_pub = self.create_publisher(Int16, 'cmd/conveyor', 10) #digging of the conveyor
+        self.bucket_vel_pub = self.create_publisher(Int16, 'cmd/bucket_vel', 10) #???
+        self.bucket_pos_pub = self.create_publisher(Int16, 'cmd/bucket_pos', 10) #this is how far the linear of the bucket chain extends to the ground
+        self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10) #do we need this? because it'll only remain the same
+        self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10) #do we need this?
         self.camera_pan_pub = self.create_publisher(Int16, 'cmd/camera_pan', 10)
 
         # Timer for polling events from pygame
@@ -67,6 +67,7 @@ class MinimalDriver(Node):
     def setKeys(self, key, val):
         velocity_msg = Twist()
         conveyor_msg = Int16()
+        camera_pan_msg = Int16()
 
         if (val == 0):
             velocity_msg.linear.x = 0.0
@@ -98,6 +99,12 @@ class MinimalDriver(Node):
                 conveyor_msg.data = 1
             if (key == 108): #l - stop conveyor, sends a 0 as msg.data
                 conveyor_msg.data = 0
+
+
+            if (key == 110): #n - this is for panning left of the camera
+                camera_pan_msg.data = -1
+            if (key == 109): #m - this is for panning right of the camera
+                camera_pan_msg.data = 1
 
         self.conveyor_pub.publish(conveyor_msg)
 
