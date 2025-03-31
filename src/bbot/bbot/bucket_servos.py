@@ -15,7 +15,7 @@ PULSE_RANGE = PULSE_MAX - PULSE_MIN
 
 class BucketServos(Node):
     def __init__(self):
-        super().__init__('bucket chain servos')
+        super().__init__('bucket_servos')
 
         # Set GPIO pin number (BCM numbering)
         GPIO.setmode(GPIO.BCM) #research on this GPIO
