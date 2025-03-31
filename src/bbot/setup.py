@@ -23,6 +23,7 @@ setup(
 			'driver = bbot.bbot_driver:main',
             'drive_motors = bbot.drive_motors:main',
             'conveyor = bbot.conveyor:main',
+            'bucket_servos = bbot.bucket_servos:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },
