@@ -55,6 +55,7 @@ class BucketServos(Node):
         self.timer.reset()
         if not self.pwm_on:
             print('PWM awake')
+            GPIO.setup(PWM_PIN, GPIO.OUT)  # Reset pin to OUT (again)
             self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
             self.pwm.start(self.convertRangeToDutyCycle(msg.data))
             self.pwm_on = True
