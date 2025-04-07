@@ -48,10 +48,12 @@ class BucketServos(Node):
     def pwm_sleep(self):
         if self.pwm_on:
             self.pwm.stop()
+            self.pwm_on = False
 
     def sub_callback(self, msg):
         if not self.pwm_on:
             self.pwm.start(self.convertRangeToDutyCycle(msg.data))
+            self.pwm_on = True
         else:
             self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
