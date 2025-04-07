@@ -8,13 +8,13 @@ PWM_PIN = 18  # Change this to the actual pin
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
-MIN_DC = 5.0
+MIN_DC = 4.5
 MAX_DC = 9.5
 MAX_RANGE = 100
 MIN_RANGE = 0
 INIT_RANGE = 0
 
-SLEEP_TIME = 5.0
+SLEEP_TIME = 3.0
 
 class BucketServos(Node):
     def __init__(self):
@@ -48,18 +48,18 @@ class BucketServos(Node):
     def pwm_sleep(self):
         print('PWM sleeping')
         if self.pwm_on:
-            self.pwm.ChangeDutyCycle(0)
+            self.pwm.stop()
             self.pwm_on = False
 
     def sub_callback(self, msg):
         self.timer.reset()
-        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
-        # if not self.pwm_on:
-        #     print('PWM awake')
-        #     self.pwm.start(self.convertRangeToDutyCycle(msg.data))
-        #     self.pwm_on = True
-        # else:
-        #     self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
+        if not self.pwm_on:
+            print('PWM awake')
+            self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
+            self.pwm.start(self.convertRangeToDutyCycle(msg.data))
+            self.pwm_on = True
+        else:
+            self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
         self.pwm.stop()
