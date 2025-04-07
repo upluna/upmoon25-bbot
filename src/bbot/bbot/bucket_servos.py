@@ -8,14 +8,11 @@ PWM_PIN = 18  # Change this to the actual pin
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
-MIN_DC = 0
-MAX_DC = 100
+MIN_DC = 5.5
+MAX_DC = 9.5
+MAX_RANGE = 100
+MIN_RANGE = 0
 INIT_RANGE = 0
-
-PWM_PERIOD_US = (1 / PWM_FREQUENCY) * 1000000 # Period in microseconds (us)
-PULSE_MIN = 1100  # Fully extended (1.1ms)
-PULSE_MAX = 1900  # Fully retracted (1.9ms)
-PULSE_RANGE = PULSE_MAX - PULSE_MIN
 
 class BucketServos(Node):
     def __init__(self):
@@ -52,10 +49,10 @@ class BucketServos(Node):
         super().destroy_node()
 
     def convertRangeToDutyCycle(self, percent):
-        if (percent < MIN_DC or percent > MAX_DC):
+        if (percent < MIN_RANGE or percent > MAX_RANGE):
             print('Servo set out of bounds')
             percent = INIT_RANGE
-        dc = (percent * (MAX_DC - MIN_DC) / MAX_DC) + MIN_DC
+        dc = (percent * (MAX_DC - MIN_DC) / MAX_RANGE) + MIN_DC
         print('Setting servo to %d' % (dc))
         return dc
 
