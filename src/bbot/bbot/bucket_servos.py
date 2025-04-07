@@ -48,19 +48,16 @@ class BucketServos(Node):
     def pwm_sleep(self):
         print('PWM sleeping')
         if self.pwm_on:
-            self.pwm.stop()
+            self.pwm.ChangeDutyCycle(0.1)
             self.pwm_on = False
 
     def sub_callback(self, msg):
         self.timer.reset()
         if not self.pwm_on:
             print('PWM awake')
-            GPIO.setup(PWM_PIN, GPIO.OUT)  # Reset pin to OUT (again)
-            self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
-            self.pwm.start(self.convertRangeToDutyCycle(msg.data))
             self.pwm_on = True
-        else:
-            self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
+
+        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
         self.pwm.stop()
