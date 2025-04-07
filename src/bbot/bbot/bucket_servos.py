@@ -44,7 +44,6 @@ class BucketServos(Node):
         self.get_logger().info('GPIO Controller Node Initialized')
 
     def sub_callback(self, msg):
-        print('Setting servo to {msg.data}%')
         self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
@@ -57,6 +56,7 @@ class BucketServos(Node):
             print('Servo set out of bounds')
             percent = INIT_RANGE
         dc = (percent * (MAX_DC - MIN_DC) / MAX_DC) + MIN_DC
+        print('Setting servo to %d' % (dc))
         return dc
 
 def main(args=None):
