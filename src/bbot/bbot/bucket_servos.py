@@ -8,11 +8,13 @@ PWM_PIN = 18  # Change this to the actual pin
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
-MIN_DC = 5.5
+MIN_DC = 5.0
 MAX_DC = 9.5
 MAX_RANGE = 100
 MIN_RANGE = 0
 INIT_RANGE = 0
+
+SLEEP_TIME = 1.0
 
 class BucketServos(Node):
     def __init__(self):
@@ -30,6 +32,9 @@ class BucketServos(Node):
 
         self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
         self.pwm.start(self.convertRangeToDutyCycle(INIT_RANGE))
+        self.pwm_on = True
+
+        self.timer = self.create_timer(SLEEP_TIME, self.pwm_sleep)
 
         # Create subscriber to receive position messages
         self.subscription = self.create_subscription(
@@ -40,8 +45,17 @@ class BucketServos(Node):
         )
         self.get_logger().info('GPIO Controller Node Initialized')
 
+    def pwm_sleep(self):
+        if self.pwm_on:
+            self.pwm.stop()
+
     def sub_callback(self, msg):
-        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
+        if not self.pwm_on:
+            self.pwm.start(self.convertRangeToDutyCycle(msg.data))
+        else:
+            self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
+
+        self.timer.reset()
 
     def destroy_node(self):
         self.pwm.stop()
@@ -53,7 +67,7 @@ class BucketServos(Node):
             print('Servo set out of bounds')
             percent = INIT_RANGE
         dc = (percent * (MAX_DC - MIN_DC) / MAX_RANGE) + MIN_DC
-        print('Setting servo to %d' % (dc))
+        print('Setting servo to %f' % (dc))
         return dc
 
 def main(args=None):
