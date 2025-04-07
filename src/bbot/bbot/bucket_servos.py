@@ -8,6 +8,10 @@ PWM_PIN = 18  # Change this to the actual pin
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
+MIN_DC = 0
+MAX_DC = 100
+INIT_RANGE = 0
+
 PWM_PERIOD_US = (1 / PWM_FREQUENCY) * 1000000 # Period in microseconds (us)
 PULSE_MIN = 1100  # Fully extended (1.1ms)
 PULSE_MAX = 1900  # Fully retracted (1.9ms)
@@ -18,10 +22,17 @@ class BucketServos(Node):
         super().__init__('bucket_servos')
 
         # Set GPIO pin number (BCM numbering)
-        GPIO.setmode(GPIO.BCM) #research on this GPIO
-        GPIO.setup(PWM_PIN, GPIO.OUT)
+        try:
+            GPIO.setmode(GPIO.BCM)
+        except Exception:
+            print('GPIO failure')
+        try:
+            GPIO.setup(PWM_PIN, GPIO.OUT, initial = GPIO.LOW)
+        except Exception:
+            print('Pin setup failure')
 
         self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
+        self.pwm.start(self.convertRangeToDutyCycle(INIT_RANGE))
 
         # Create subscriber to receive position messages
         self.subscription = self.create_subscription(
@@ -33,25 +44,20 @@ class BucketServos(Node):
         self.get_logger().info('GPIO Controller Node Initialized')
 
     def sub_callback(self, msg):
-        self.set_servo_position(msg.data)
+        print('Setting servo to {msg.data}%')
+        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
+        self.pwm.stop()
         GPIO.cleanup()
         super().destroy_node()
 
-    def set_servo_position(self, position):
-        """
-        Sets the servo position based on input percentage (0-100%).
-        - 0%  -> Fully Extended (1100µs)
-        - 100% -> Fully Retracted (1900µs)
-        """
-        if 0 <= position <= 100:
-            pulse_width = PULSE_MIN + (position / 100.0) * PULSE_RANGE
-            duty_cycle = (pulse_width / PWM_PERIOD_US) * 100  # Convert to duty cycle
-            self.pwm.ChangeDutyCycle(duty_cycle)
-            print(f"Servo set to {position}% ({pulse_width}µs pulse)")
-        else:
-            print("Error: Position must be between 0 and 100.")
+    def convertRangeToDutyCycle(self, percent):
+        if (percent < MIN_DC or percent > MAX_DC):
+            print('Servo set out of bounds')
+            percent = INIT_RANGE
+        dc = (percent * (MAX_DC - MIN_DC) / MAX_DC) + MIN_DC
+        return dc
 
 def main(args=None):
     rclpy.init(args=args)
