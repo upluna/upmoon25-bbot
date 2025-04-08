@@ -21,6 +21,7 @@ saber = Sabertooth('/dev/ttyACM0', baudrate=9600, address=128, timeout=0.1) #lef
 saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
 
 TURN_SPEED = 50.0
+DIR = -1.0          # -1 is the correct direction, set to 1 for backwards
 
 class DriveMotors(Node):
 
@@ -41,10 +42,10 @@ class DriveMotors(Node):
         rotation = msg.angular.z
 
         if (throttle != 0.0 and rotation == 0.0):
-            saber.drive(1, throttle)
-            saber.drive(2, -throttle)
-            saber2.drive(1, throttle)
-            saber2.drive(2, -throttle)
+            saber.drive(1, throttle*DIR)
+            saber.drive(2, -throttle*DIR)
+            saber2.drive(1, throttle*DIR)
+            saber2.drive(2, -throttle*DIR)
         elif (throttle != 0.0 and rotation != 0.0):
             t1 = throttle
             t2 = throttle
@@ -54,21 +55,21 @@ class DriveMotors(Node):
             elif (rotation > 0.0): # right turn
                 t1 = int(t2 * 0.5)
 
-            saber.drive(1, t1)
-            saber.drive(2, -t1)
-            saber2.drive(1, t2)
-            saber2.drive(2, -t2)
+            saber.drive(1, t1*DIR)
+            saber.drive(2, -t1*DIR)
+            saber2.drive(1, t2*DIR)
+            saber2.drive(2, -t2*DIR)
         elif (throttle == 0.0 and rotation != 0.0):
             if (rotation < 0.0): # left turn
-                saber2.drive(1, -TURN_SPEED)
-                saber2.drive(2, TURN_SPEED)
-                saber.drive(1, TURN_SPEED)
-                saber.drive(2, -TURN_SPEED)
+                saber2.drive(1, -TURN_SPEED*DIR)
+                saber2.drive(2, TURN_SPEED*DIR)
+                saber.drive(1, TURN_SPEED*DIR)
+                saber.drive(2, -TURN_SPEED*DIR)
             elif (rotation > 0.0): # right turn
-                saber.drive(1, -TURN_SPEED)
-                saber.drive(2, TURN_SPEED)
-                saber2.drive(1, TURN_SPEED)
-                saber2.drive(2, -TURN_SPEED)
+                saber.drive(1, -TURN_SPEED*DIR)
+                saber.drive(2, TURN_SPEED*DIR)
+                saber2.drive(1, TURN_SPEED*DIR)
+                saber2.drive(2, -TURN_SPEED*DIR)
         else:
             saber.stop()
             saber2.stop()

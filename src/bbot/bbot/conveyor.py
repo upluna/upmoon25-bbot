@@ -8,7 +8,7 @@ class Conveyor(Node):
         super().__init__('conveyor')
 
         # Set GPIO pin number (BCM numbering)
-        self.gpio_pin = 16 # TODO: pick a pin for this that has PWM 
+        self.gpio_pin = 16 
         GPIO.setmode(GPIO.BCM) #research on this GPIO
         GPIO.setup(self.gpio_pin, GPIO.OUT)
 
