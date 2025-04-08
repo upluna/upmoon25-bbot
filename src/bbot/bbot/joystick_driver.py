@@ -59,7 +59,7 @@ class JoystickDriver(Node):
         self.tensioner_pub = self.create_publisher(Int16, 'cmd/tensioner', 10)
         self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10)
 
-        self.bucket_pos = 0
+        self.bucket_pos = 0.0
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
@@ -128,13 +128,13 @@ class JoystickDriver(Node):
 
         # Publish Bucket Chain Position
         msg = Int16()
-        if (self.controller.get_button(X_BT) and self.bucket_pos < 100):
-            self.bucket_pos += 1
-            msg.data = self.bucket_pos
+        if (self.controller.get_button(X_BT) and self.bucket_pos < 100.0):
+            self.bucket_pos += 0.5
+            msg.data = int(self.bucket_pos)
             self.bucket_pos_pub.publish(msg)
-        elif (self.controller.get_button(B_BT) and self.bucket_pos > 0):
-            self.bucket_pos -= 1
-            msg.data = self.bucket_pos
+        elif (self.controller.get_button(B_BT) and self.bucket_pos > 0.0):
+            self.bucket_pos -= 0.5
+            msg.data = int(self.bucket_pos)
             self.bucket_pos_pub.publish(msg)
             
 
