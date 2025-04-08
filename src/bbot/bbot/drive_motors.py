@@ -21,7 +21,7 @@ saber = Sabertooth('/dev/ttyACM0', baudrate=9600, address=128, timeout=0.1) #lef
 saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
 
 TURN_SPEED = 50.0
-DIR = -1.0          # -1 is the correct direction, set to 1 for backwards
+DIR = 1.0          # -1 is the correct direction, set to 1 for backwards
 
 class DriveMotors(Node):
 
