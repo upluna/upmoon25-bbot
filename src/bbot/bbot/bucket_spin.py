@@ -23,6 +23,8 @@ class MotorControllerNode(Node):
         )
         self.slave_id = 1  # Modbus address of the motor controller
 
+        self.is_enabled = False # Track if the motor is enabled/disabled
+
         # Motor control registers
         self.REG_CONTROL = 0x8106
         self.REG_SPEED = 0x8110
@@ -43,9 +45,9 @@ class MotorControllerNode(Node):
         self.get_logger().info('Bucket Chain Motor controller node initialized.')
 
     def rpm_callback(self, msg: Int16):
-        rpm = msg.data
+        rpm = (30 * msg.data)
         try:
-            if rpm == 0:
+            if rpm == 0 and self.is_enabled:
                 self.disable_motor()
             else:
                 direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
@@ -62,11 +64,11 @@ class MotorControllerNode(Node):
         # Bit 1 = FR (1: reverse)
         control_byte = 0
         if enable:
+            self.is_enabled = True
             control_byte |= 0x01  # Enable motor
         if direction == 1:
             control_byte |= 0x02  # Reverse
 
-        #control_word = (0x04 << 8) | control_byte  # second byte = 0x04 = internal mode
         control_word = (0x03 << 8) | control_byte  # Internal control + internal speed mode?
 
         result = self.client.write_register(self.REG_CONTROL, control_word, unit=self.slave_id)
@@ -78,13 +80,13 @@ class MotorControllerNode(Node):
                 f'Motor {"enabled" if enable else "disabled"} | Direction: {"reverse" if direction else "forward"}')
 
     def disable_motor(self):
-        control_word = (0x04 << 8) | 0x00  # Disable, keep mode = internal
+        control_word = (0x03 << 8) | 0x00  # Disable, keep mode = internal
         result = self.client.write_register(self.REG_CONTROL, control_word, unit=self.slave_id)
 
         if result.isError():
             self.get_logger().warn('Failed to disable motor')
         else:
-            self.get_logger().info('Motor disabled (RPM = 0)')
+            self.is_enabled = False
 
     def set_motor_speed(self, rpm: int):
         result = self.client.write_register(self.REG_SPEED, rpm, unit=self.slave_id)
