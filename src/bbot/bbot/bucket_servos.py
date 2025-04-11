@@ -14,7 +14,7 @@ MAX_RANGE = 100
 MIN_RANGE = 0
 INIT_RANGE = 0
 
-SLEEP_TIME = 0.5
+SLEEP_TIME = 0.8
 
 class BucketServos(Node):
     def __init__(self):
