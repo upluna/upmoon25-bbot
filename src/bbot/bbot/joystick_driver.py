@@ -111,9 +111,11 @@ class JoystickDriver(Node):
         if (throttle <= 5 and throttle >= -5):
             throttle = 0.0
         
-        rotation = 100 * self.controller.get_axis(RJOY_X)
-        if (rotation <= 5 and rotation >= -5):
-            rotation = 0.0
+        rotation = 0.0
+        if self.controller.get_button(LTRIGGER):
+            rotation -= 50.0
+        if self.controller.get_button(RTRIGGER):
+            rotation += 50.0
 
         msg = Twist()
         msg.linear.x = throttle
