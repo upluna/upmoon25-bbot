@@ -60,6 +60,7 @@ class JoystickDriver(Node):
         self.camera_height_pub = self.create_publisher(Int16, 'cmd/camera_height', 10)
 
         self.bucket_pos = 0.0
+        self.camera_height = 0.0
 
         # Timer for polling events from pygame
         self.timer = self.create_timer(self.clk, self.pollEvents)
@@ -138,6 +139,17 @@ class JoystickDriver(Node):
             self.bucket_pos -= 0.5
             msg.data = int(self.bucket_pos)
             self.bucket_pos_pub.publish(msg)
+
+        # Publish Camera Height Position
+        msg = Int16()
+        if (self.controller.get_button(START_BT) and self.camera_height < 100.0):
+            self.camera_height += 0.5
+            msg.data = int(self.camera_height)
+            self.camera_height_pub.publish(msg)
+        elif (self.controller.get_button(BACK_BT) and self.camera_height > 0.0):
+            self.camera_height -= 0.5
+            msg.data = int(self.camera_height)
+            self.camera_height_pub.publish(msg)
             
 
         pygame.display.update()
