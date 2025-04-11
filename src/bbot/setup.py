@@ -26,6 +26,7 @@ setup(
             'conveyor = bbot.conveyor:main',
             'bucket_servos = bbot.bucket_servos:main',
             'camera = bbot.camera:main',
+            'bucket_spin = bbot.bucket_spin:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },
