@@ -3,48 +3,85 @@ from rclpy.node import Node
 import RPi.GPIO as GPIO
 from std_msgs.msg import Int16
 
+# Define the PWM pin
+PWM_PIN = 40
 
+# Servo PWM Specs
+PWM_FREQUENCY = 50  # 50Hz (20ms period)
+MIN_DC = 4.5
+MAX_DC = 9.5
+MAX_RANGE = 100
+MIN_RANGE = 0
+INIT_RANGE = 0
+
+SLEEP_TIME = 3.0
 
 class CameraHeight(Node):
     def __init__(self):
-        super().__init__('camera_height')
+        super().__init__('bucket_servos')
 
-        self.gpio_pin = 40 # pin 40 is a PWM pin, refer to PWM_pins.txt
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpio_pin, GPIO.OUT)
+        # Set GPIO pin number (BCM numbering)
+        try:
+            GPIO.setmode(GPIO.BCM)
+        except Exception:
+            print('GPIO failure')
+        try:
+            GPIO.setup(PWM_PIN, GPIO.OUT, initial = GPIO.LOW)
+        except Exception:
+            print('Pin setup failure')
 
-        GPIO.output(self.gpio_pin, GPIO.HIGH)
+        self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
+        self.pwm.start(self.convertRangeToDutyCycle(INIT_RANGE))
+        self.pwm_on = True
 
-        # Create subscriber to receive Integer16 messages
+        self.timer = self.create_timer(SLEEP_TIME, self.pwm_sleep)
+
+        # Create subscriber to receive position messages
         self.subscription = self.create_subscription(
             Int16,
             'cmd/camera_height',
             self.sub_callback,
             10
         )
-        self.get_logger().info('GPIO controller node for Camera Actuator Initialized')
+        self.get_logger().info('GPIO Controller Node Initialized')
 
+    def pwm_sleep(self):
+        print('PWM sleeping')
+        if self.pwm_on:
+            self.pwm.ChangeDutyCycle(100)
+            self.pwm_on = False
 
     def sub_callback(self, msg):
-        if (msg.data == 1): #move the camera height up
-            GPIO.output(self.gpio_pin, GPIO.LOW)
-        else: #don't move the camera height at all #TODO: Implement the height of camera moving down as well.
-            GPIO.output(self.gpio_pin, GPIO.HIGH)
-        self.get_logger().info(f'Extending camera height mount with an actuator ({self.gpio_pin}) {"ON" if (msg.data == 1) else "OFF"}')
+        self.timer.reset()
+        if not self.pwm_on:
+            print('PWM awake')
+            self.pwm_on = True
+
+        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
+        self.pwm.stop()
         GPIO.cleanup()
         super().destroy_node()
 
+    def convertRangeToDutyCycle(self, percent):
+        if (percent < MIN_RANGE or percent > MAX_RANGE):
+            print('Servo set out of bounds')
+            percent = INIT_RANGE
+        dc = (percent * (MAX_DC - MIN_DC) / MAX_RANGE) + MIN_DC
+        print('Setting servo to %f' % (dc))
+        return dc
 
+def main(args=None):
+    rclpy.init(args=args)
+    node = CameraHeight()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
-    def main(args=None):
-        rclpy.init(args=args)
-        node = CameraHeight()
-        try:
-            rclpy.spin(node) #.spin() also works on actuators
-        except KeyboardInterrupt:
-            pass
-        finally:
-            node.destroy_node()
-            rclpy.shutdown()
+if __name__ == '__main__':
+    main()

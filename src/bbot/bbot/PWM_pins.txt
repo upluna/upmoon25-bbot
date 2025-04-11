@@ -5,3 +5,4 @@ GPIO 12, 13, 18, 19, 40, 41, and 44
 Camera height = PIN 40
 Conveyor = PIN 16
 Camera Pan = PIN 19
+Bucket chain raise/lower: PIN 18
