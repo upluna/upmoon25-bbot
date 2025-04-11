@@ -66,8 +66,8 @@ class MotorControllerNode(Node):
         if direction == 1:
             control_byte |= 0x02  # Reverse
 
-        control_word = (0x04 << 8) | control_byte  # second byte = 0x04 = internal mode
-        #control_word = (0x03 << 8) | control_byte  # Internal control + internal speed mode?
+        #control_word = (0x04 << 8) | control_byte  # second byte = 0x04 = internal mode
+        control_word = (0x03 << 8) | control_byte  # Internal control + internal speed mode?
 
         result = self.client.write_register(self.REG_CONTROL, control_word, unit=self.slave_id)
 
