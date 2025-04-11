@@ -21,7 +21,7 @@ saber = Sabertooth('/dev/ttyACM0', baudrate=9600, address=128, timeout=0.1) #lef
 saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
 
 TURN_SPEED = 50.0
-DIR = 1.0          # -1 is the correct direction, set to 1 for backwards
+DIR = 1.0          # 1 is the correct direction, set to -1 for backwards
 
 class DriveMotors(Node):
 
@@ -36,8 +36,7 @@ class DriveMotors(Node):
         self.get_logger().info('Successful initialization!')
 
     def listener_callback(self, msg):
-        #wasd:throttle
-        print(msg)
+        #print(msg)
         throttle = msg.linear.x
         rotation = msg.angular.z
 
@@ -73,7 +72,6 @@ class DriveMotors(Node):
         else:
             saber.stop()
             saber2.stop()
-            self.get_logger().info("Stopped")
 
 
 def main(args=None):
