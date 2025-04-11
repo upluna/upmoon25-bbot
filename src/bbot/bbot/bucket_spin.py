@@ -7,6 +7,8 @@ from std_msgs.msg import Int16
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.exceptions import ModbusIOException
 
+SPEED_FACTOR = 30
+
 class MotorControllerNode(Node):
     def __init__(self):
         super().__init__('bld515c_motor_controller')
@@ -45,10 +47,11 @@ class MotorControllerNode(Node):
         self.get_logger().info('Bucket Chain Motor controller node initialized.')
 
     def rpm_callback(self, msg: Int16):
-        rpm = (30 * msg.data)
+        rpm = (SPEED_FACTOR * msg.data)
         try:
-            if rpm == 0 and self.is_enabled:
-                self.disable_motor()
+            if rpm == 0:
+                if self.is_enabled:
+                    self.disable_motor()
             else:
                 direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
                 self.set_motor_control(enable=True, direction=direction)
