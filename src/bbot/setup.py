@@ -10,6 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/bbot_launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -24,6 +25,7 @@ setup(
             'drive_motors = bbot.drive_motors:main',
             'conveyor = bbot.conveyor:main',
             'bucket_servos = bbot.bucket_servos:main',
+            'camera = bbot.camera:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main'
         ],
     },
