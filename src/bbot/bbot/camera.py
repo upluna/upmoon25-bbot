@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 from std_msgs.msg import Int16
 
 # Define the PWM pin
-PWM_PIN = 40
+PWM_PIN = 21
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)

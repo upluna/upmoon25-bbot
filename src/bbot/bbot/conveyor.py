@@ -21,7 +21,7 @@ class Conveyor(Node):
             self.sub_callback,
             10
         )
-        self.get_logger().info('GPIO Controller Node Initialized')
+        self.get_logger().info('Conveyor Node Initialized')
 
     def sub_callback(self, msg):
         if (msg.data == 1):
@@ -33,6 +33,7 @@ class Conveyor(Node):
     def destroy_node(self):
         GPIO.cleanup()
         super().destroy_node()
+
 
 def main(args=None):
     rclpy.init(args=args)
