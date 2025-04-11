@@ -28,7 +28,6 @@ class Conveyor(Node):
             GPIO.output(self.gpio_pin, GPIO.LOW)
         else:
             GPIO.output(self.gpio_pin, GPIO.HIGH)
-        self.get_logger().info(f'Turning conveyor ({self.gpio_pin}) {"ON" if (msg.data == 1) else "OFF"}')
 
     def destroy_node(self):
         GPIO.cleanup()

@@ -8,13 +8,13 @@ PWM_PIN = 21
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
-MIN_DC = 4.95
+MIN_DC = 4.7
 MAX_DC = 9.5
 MAX_RANGE = 100
 MIN_RANGE = 0
 INIT_RANGE = 0
 
-SLEEP_TIME = 3.0
+SLEEP_TIME = 1.0
 
 class CameraHeight(Node):
     def __init__(self):
