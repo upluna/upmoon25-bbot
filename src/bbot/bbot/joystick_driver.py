@@ -150,6 +150,15 @@ class JoystickDriver(Node):
             self.camera_height -= 0.5
             msg.data = int(self.camera_height)
             self.camera_height_pub.publish(msg)
+
+        # Publish Bucket Chain Speed
+        bucket_speed = int(-100.0 * self.controller.get_axis(RJOY_Y))
+        if (bucket_speed <= 5 and bucket_speed >= -5):
+            bucket_speed = 0
+        
+        msg = Int16()
+        msg.data = bucket_speed
+        self.bucket_vel_pub.publish(msg)
             
 
         pygame.display.update()
