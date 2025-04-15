@@ -49,13 +49,9 @@ class MotorControllerNode(Node):
     def rpm_callback(self, msg: Int16):
         rpm = (SPEED_FACTOR * msg.data)
         try:
-            if rpm == 0:
-                if self.is_enabled:
-                    self.disable_motor()
-            else:
-                direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
-                self.set_motor_control(enable=True, direction=direction)
-                self.set_motor_speed(abs(rpm))
+            direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
+            self.set_motor_control(enable=True, direction=direction)
+            self.set_motor_speed(abs(rpm))
         except ModbusIOException as e:
             self.get_logger().error(f'Modbus IO error: {e}')
         except Exception as e:
@@ -81,15 +77,6 @@ class MotorControllerNode(Node):
         else:
             self.get_logger().info(
                 f'Motor {"enabled" if enable else "disabled"} | Direction: {"reverse" if direction else "forward"}')
-
-    def disable_motor(self):
-        control_word = (0x03 << 8) | 0x00  # Disable, keep mode = internal
-        result = self.client.write_register(self.REG_CONTROL, control_word, unit=self.slave_id)
-
-        if result.isError():
-            self.get_logger().warn('Failed to disable motor')
-        else:
-            self.is_enabled = False
 
     def set_motor_speed(self, rpm: int):
         result = self.client.write_register(self.REG_SPEED, rpm, unit=self.slave_id)

@@ -27,4 +27,10 @@ def generate_launch_description():
             name='camera_node',
             output='screen'
         ),
+        Node(
+            package='bbot',
+            executable='bucket_spin',
+            name='bucket_spin_node',
+            output='screen'
+        ),
     ])
