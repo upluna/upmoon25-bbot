@@ -7,7 +7,7 @@ from std_msgs.msg import Int16
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.exceptions import ModbusIOException
 
-SPEED_FACTOR = 30
+SPEED_FACTOR = 15
 
 class MotorControllerNode(Node):
     def __init__(self):
