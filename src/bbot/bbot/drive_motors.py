@@ -51,6 +51,21 @@ class ReconnectableSaber:
             self._connect()
         except Exception as e:
             print(f"[ReconnectableSaber] Unexpected error: {e}")
+    
+    def stop(self):
+        if not self.saber:
+            self._connect()
+            if not self.saber:
+                print("[ReconnectableSaber] Still not connected. Skipping command.")
+                return
+
+        try:
+            self.saber.stop()
+        except SerialException as e:
+            print(f"[ReconnectableSaber] SerialException: {e}. Reconnecting...")
+            self._connect()
+        except Exception as e:
+            print(f"[ReconnectableSaber] Unexpected error: {e}")
 
 
 saber = ReconnectableSaber('/dev/ttyACM2', baudrate=9600, address=128, timeout=0.1) #left wheels
