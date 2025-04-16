@@ -79,8 +79,6 @@ class MotorControllerNode(Node):
         result = self.client.write_register(self.REG_SPEED, rpm, unit=self.slave_id)
         if result.isError():
             self.get_logger().warn(f'Failed to set speed to {rpm} RPM')
-        else:
-            self.get_logger().info(f'Set speed: {rpm} RPM')
 
     def destroy_node(self):
         self.client.close()
