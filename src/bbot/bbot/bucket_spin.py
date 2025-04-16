@@ -74,9 +74,6 @@ class MotorControllerNode(Node):
 
         if result.isError():
             self.get_logger().warn(f'Failed to write motor control: {control_word:#04x}')
-        else:
-            self.get_logger().info(
-                f'Motor {"enabled" if enable else "disabled"} | Direction: {"reverse" if direction else "forward"}')
 
     def set_motor_speed(self, rpm: int):
         result = self.client.write_register(self.REG_SPEED, rpm, unit=self.slave_id)
