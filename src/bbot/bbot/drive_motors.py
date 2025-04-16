@@ -16,9 +16,45 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from pysabertooth import Sabertooth
+import time
+from serial import SerialException
+from pysabertooth import Sabertooth
 
-saber = Sabertooth('/dev/ttyACM2', baudrate=9600, address=128, timeout=0.1) #left wheels
-saber2 = Sabertooth('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
+class ReconnectableSaber:
+    def __init__(self, port="/dev/ttyUSB0", baudrate=9600, address=128, timeout=0.1):
+        self.port = port
+        self.baudrate = baudrate
+        self.address = address
+        self.timeout = timeout
+        self.saber = None
+        self._connect()
+
+    def _connect(self):
+        try:
+            self.saber = Sabertooth(self.port, baudrate=self.baudrate, address=self.address, timeout=self.timeout)
+            print("[ReconnectableSaber] Connected to Sabertooth")
+        except Exception as e:
+            print(f"[ReconnectableSaber] Failed to connect: {e}")
+            self.saber = None
+
+    def drive(self, motor, speed):
+        if not self.saber:
+            self._connect()
+            if not self.saber:
+                print("[ReconnectableSaber] Still not connected. Skipping command.")
+                return
+
+        try:
+            self.saber.drive(motor, speed)
+        except SerialException as e:
+            print(f"[ReconnectableSaber] SerialException: {e}. Reconnecting...")
+            self._connect()
+        except Exception as e:
+            print(f"[ReconnectableSaber] Unexpected error: {e}")
+
+
+saber = ReconnectableSaber('/dev/ttyACM2', baudrate=9600, address=128, timeout=0.1) #left wheels
+saber2 = ReconnectableSaber('/dev/ttyACM1', baudrate=9600, address=128, timeout=0.1) #right wheels
 
 TURN_SPEED = 50.0
 DIR = 1.0          # 1 is the correct direction, set to -1 for backwards
