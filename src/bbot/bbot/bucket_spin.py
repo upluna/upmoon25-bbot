@@ -10,11 +10,11 @@ from pymodbus.exceptions import ModbusIOException
 
 SPEED_FACTOR = 30
 
-RAMP_ACC = 600 # rpm/s
+RAMP_ACC = 200 # rpm/s
 RAMP_DELAY = 0.05
 RAMP_STEP = int(RAMP_ACC * RAMP_DELAY)
 
-STARTING_TORQUE = 0xA0 # Range: 0x00 - 0xFF
+STARTING_TORQUE = 0xD0 # Range: 0x00 - 0xFF
 
 class MotorControllerNode(Node):
     def __init__(self):
