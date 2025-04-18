@@ -153,9 +153,19 @@ class JoystickDriver(Node):
 
         # Publish Bucket Chain Speed
         bucket_speed = int(-100.0 * self.controller.get_axis(RJOY_Y))
-        if (bucket_speed <= 5 and bucket_speed >= -5):
+        if (abs(bucket_speed) <= 10):
             bucket_speed = 0
-        
+        elif (abs(bucket_speed) <=20):
+            bucket_speed = 20 if bucket_speed > 0 else -20
+        elif (abs(bucket_speed) <= 40):
+            bucket_speed = 40 if bucket_speed > 0 else -40
+        elif (abs(bucket_speed) <=60):
+            bucket_speed = 60 if bucket_speed > 0 else -60
+        elif (abs(bucket_speed) <= 80):
+            bucket_speed = 80 if bucket_speed > 0 else -80
+        elif (abs(bucket_speed) <= 100):
+            bucket_speed = 100 if bucket_speed > 0 else -100
+
         msg = Int16()
         msg.data = bucket_speed
         self.bucket_vel_pub.publish(msg)
