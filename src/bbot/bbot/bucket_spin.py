@@ -10,11 +10,9 @@ from pymodbus.exceptions import ModbusIOException
 
 SPEED_FACTOR = 30
 
-RAMP_ACC = 200 # rpm/s
-RAMP_DELAY = 0.05
-RAMP_STEP = int(RAMP_ACC * RAMP_DELAY)
+RAMP = 0x14 # 10rpm/s
 
-STARTING_TORQUE = 0xD0 # Range: 0x00 - 0xFF
+STARTING_TORQUE = 0xE0 # Range: 0x00 - 0xFF
 
 class MotorControllerNode(Node):
     def __init__(self):
@@ -47,6 +45,9 @@ class MotorControllerNode(Node):
         # set starting torque
         self.client.write_register(0x8109, STARTING_TORQUE, unit=1)
 
+        acc_dec_word = (RAMP << 8) | RAMP  # High byte first
+        self.client.write_register(0x810B, acc_dec_word, unit=1)
+
 
         # Subscribe to RPM commands
         self.subscriber = self.create_subscription(
@@ -61,8 +62,10 @@ class MotorControllerNode(Node):
         rpm = (SPEED_FACTOR * msg.data)
         if rpm != self.current_rpm:
             try:
+                self.current_rpm = rpm
                 direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
-                self.ramp_speed_to(abs(rpm), direction)
+                self.set_motor_control(True, direction)
+                self.set_motor_speed(rpm)
                 self.get_logger().info(f'Set rpm to {rpm}')
             except ModbusIOException as e:
                 self.get_logger().error(f'Modbus IO error: {e}')
@@ -93,18 +96,18 @@ class MotorControllerNode(Node):
         if result.isError():
             self.get_logger().warn(f'Failed to set speed to {rpm} RPM')
 
-    def ramp_speed_to(self, target_rpm: int, direction: int, step: int = RAMP_STEP, delay: float = RAMP_DELAY):
-        start_rpm = self.current_rpm
-        self.current_rpm = target_rpm
+    # def ramp_speed_to(self, target_rpm: int, direction: int, step: int = RAMP_STEP, delay: float = RAMP_DELAY):
+    #     start_rpm = self.current_rpm
+    #     self.current_rpm = target_rpm
 
-        self.set_motor_control(enable=True, direction=direction)
+    #     self.set_motor_control(enable=True, direction=direction)
 
-        for rpm in range(start_rpm, target_rpm + 1, step):
-            self.set_motor_speed(rpm)
-            time.sleep(delay)
+    #     for rpm in range(start_rpm, target_rpm + 1, step):
+    #         self.set_motor_speed(rpm)
+    #         time.sleep(delay)
 
-        # Ensure exact target RPM is set
-        self.set_motor_speed(target_rpm)
+    #     # Ensure exact target RPM is set
+    #     self.set_motor_speed(target_rpm)
 
 
     def destroy_node(self):
