@@ -45,7 +45,7 @@ class MotorControllerNode(Node):
             return
         
         # set starting torque
-        client.write_register(0x8109, STARTING_TORQUE, unit=1)
+        self.client.write_register(0x8109, STARTING_TORQUE, unit=1)
 
 
         # Subscribe to RPM commands
