@@ -14,6 +14,8 @@ RAMP_ACC = 600 # rpm/s
 RAMP_DELAY = 0.05
 RAMP_STEP = int(RAMP_ACC * RAMP_DELAY)
 
+STARTING_TORQUE = 0xA0 # Range: 0x00 - 0xFF
+
 class MotorControllerNode(Node):
     def __init__(self):
         super().__init__('bld515c_motor_controller')
@@ -41,6 +43,10 @@ class MotorControllerNode(Node):
             self.get_logger().error('Failed to connect to motor controller.')
             rclpy.shutdown()
             return
+        
+        # set starting torque
+        client.write_register(0x8109, STARTING_TORQUE, unit=1)
+
 
         # Subscribe to RPM commands
         self.subscriber = self.create_subscription(
