@@ -10,7 +10,7 @@ from pymodbus.exceptions import ModbusIOException
 
 SPEED_FACTOR = 30
 
-RAMP_ACC = 300 # rpm/s
+RAMP_ACC = 600 # rpm/s
 RAMP_DELAY = 0.05
 RAMP_STEP = int(RAMP_ACC * RAMP_DELAY)
 
@@ -53,13 +53,16 @@ class MotorControllerNode(Node):
 
     def rpm_callback(self, msg: Int16):
         rpm = (SPEED_FACTOR * msg.data)
-        try:
-            direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
-            self.ramp_speed_to(abs(rpm), direction)
-        except ModbusIOException as e:
-            self.get_logger().error(f'Modbus IO error: {e}')
-        except Exception as e:
-            self.get_logger().error(f'Unexpected error: {e}')
+        if rpm != self.current_rpm:
+            try:
+                direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
+                self.ramp_speed_to(abs(rpm), direction)
+                self.get_logger().info(f'Set rpm to {rpm}')
+            except ModbusIOException as e:
+                self.get_logger().error(f'Modbus IO error: {e}')
+            except Exception as e:
+                self.get_logger().error(f'Unexpected error: {e}')
+
 
     def set_motor_control(self, enable: bool, direction: int):
         # Build control byte:
