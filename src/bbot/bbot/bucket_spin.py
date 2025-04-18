@@ -3,11 +3,16 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int16
+import time
 
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.exceptions import ModbusIOException
 
-SPEED_FACTOR = 15
+SPEED_FACTOR = 30
+
+RAMP_ACC = 300 # rpm/s
+RAMP_DELAY = 0.05
+RAMP_STEP = int(RAMP_ACC * RAMP_DELAY)
 
 class MotorControllerNode(Node):
     def __init__(self):
@@ -24,7 +29,7 @@ class MotorControllerNode(Node):
             timeout=1
         )
         self.slave_id = 1  # Modbus address of the motor controller
-
+        self.current_rpm = 0
         self.is_enabled = False # Track if the motor is enabled/disabled
 
         # Motor control registers
@@ -50,8 +55,7 @@ class MotorControllerNode(Node):
         rpm = (SPEED_FACTOR * msg.data)
         try:
             direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
-            self.set_motor_control(enable=True, direction=direction)
-            self.set_motor_speed(abs(rpm))
+            self.ramp_speed_to(abs(rpm), direction)
         except ModbusIOException as e:
             self.get_logger().error(f'Modbus IO error: {e}')
         except Exception as e:
@@ -79,6 +83,20 @@ class MotorControllerNode(Node):
         result = self.client.write_register(self.REG_SPEED, rpm, unit=self.slave_id)
         if result.isError():
             self.get_logger().warn(f'Failed to set speed to {rpm} RPM')
+
+    def ramp_speed_to(self, target_rpm: int, direction: int, step: int = RAMP_STEP, delay: float = RAMP_DELAY):
+        start_rpm = self.current_rpm
+        self.current_rpm = target_rpm
+
+        self.set_motor_control(enable=True, direction=direction)
+
+        for rpm in range(start_rpm, target_rpm + 1, step):
+            self.set_motor_speed(rpm)
+            time.sleep(delay)
+
+        # Ensure exact target RPM is set
+        self.set_motor_speed(target_rpm)
+
 
     def destroy_node(self):
         self.client.close()
