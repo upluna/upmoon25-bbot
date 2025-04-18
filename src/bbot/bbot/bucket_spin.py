@@ -8,11 +8,11 @@ import time
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.exceptions import ModbusIOException
 
-SPEED_FACTOR = 30
+SPEED_FACTOR = 15
 
 RAMP = 0xA0 # 10rpm/s
 
-STARTING_TORQUE = 0xE0 # Range: 0x00 - 0xFF
+STARTING_TORQUE = 0xFF # Range: 0x00 - 0xFF
 
 class MotorControllerNode(Node):
     def __init__(self):
