@@ -10,7 +10,7 @@ from pymodbus.exceptions import ModbusIOException
 
 SPEED_FACTOR = 30
 
-RAMP = 0x14 # 10rpm/s
+RAMP = 0xA0 # 10rpm/s
 
 STARTING_TORQUE = 0xE0 # Range: 0x00 - 0xFF
 
@@ -62,10 +62,10 @@ class MotorControllerNode(Node):
         rpm = (SPEED_FACTOR * msg.data)
         if rpm != self.current_rpm:
             try:
-                self.current_rpm = rpm
+                self.current_rpm = abs(rpm)
                 direction = 1 if rpm < 0 else 0  # 1 = reverse, 0 = forward
                 self.set_motor_control(True, direction)
-                self.set_motor_speed(rpm)
+                self.set_motor_speed(abs(rpm))
                 self.get_logger().info(f'Set rpm to {rpm}')
             except ModbusIOException as e:
                 self.get_logger().error(f'Modbus IO error: {e}')
