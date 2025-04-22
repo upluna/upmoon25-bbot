@@ -14,7 +14,7 @@ MAX_RANGE = 100
 MIN_RANGE = 0
 INIT_RANGE = 0
 
-SLEEP_TIME = 1.0
+SLEEP_TIME = 3.0
 
 class CameraHeight(Node):
     def __init__(self):

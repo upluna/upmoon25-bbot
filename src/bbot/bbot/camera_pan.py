@@ -1,73 +1,87 @@
-import rcply
-from rcply import Node
+import rclpy
+from rclpy.node import Node
 import RPi.GPIO as GPIO
 from std_msgs.msg import Int16
 
+# Define the PWM pin
+PWM_PIN = 19
 
+# Servo PWM Specs
+PWM_FREQUENCY = 50  # 50Hz (20ms period)
+MIN_DC = 2.5
+MAX_DC = 12.5
+MAX_RANGE = 300
+MIN_RANGE = 0
+INIT_RANGE = 0
+
+SLEEP_TIME = 10.0
 
 class CameraPan(Node):
     def __init__(self):
         super().__init__('camera_pan')
-        
 
-        #set GPIO pin number:
-        self.gpio_pin = 19
+        # Set GPIO pin number (BCM numbering)
+        try:
+            GPIO.setmode(GPIO.BCM)
+        except Exception:
+            print('GPIO failure')
+        try:
+            GPIO.setup(PWM_PIN, GPIO.OUT, initial = GPIO.LOW)
+        except Exception:
+            print('Pin setup failure')
 
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpio_pin, GPIO.OUT)
+        self.pwm = GPIO.PWM(PWM_PIN, PWM_FREQUENCY)
+        self.pwm.start(self.convertRangeToDutyCycle(INIT_RANGE))
+        self.pwm_on = True
 
-        #GPIO.output(self.gpio_pin, GPIO.HIGH)
+        self.timer = self.create_timer(SLEEP_TIME, self.pwm_sleep)
 
-
-        # Create subscriber to receive Boolean messages
+        # Create subscriber to receive position messages
         self.subscription = self.create_subscription(
             Int16,
-            'cmd/camera_pan',
+            'cmd/camera_height',
             self.sub_callback,
             10
         )
+        self.get_logger().info('Camera Height Node Initialized')
 
-        self.freq = 50 #50Hz PWM frequency, which is the standard
-        self.left_pulse = 2500 #full left 180 degrees
-        self.right_pulse = 500 #full right 0 degrees
-
-        self.pwm = GPIO.PWM(self.pwm_pin, self.freq)
-        self.pwn.start(0) #no movement at tha beginning
-
-        self.get_logger().info('GPIO Controller Node for Camera Pan Servo Initialized')
-
+    def pwm_sleep(self):
+        #print('PWM sleeping')
+        if self.pwm_on:
+            self.pwm.ChangeDutyCycle(100)
+            self.pwm_on = False
 
     def sub_callback(self, msg):
-        if (msg.data == -1): #turn left
-            duty_cycle = self.pulse_to_duty(self.left_pulse)
-        elif (msg.data == 1): #turn right
-            duty_cycle = self.pulse_to_duty(self.right_pulse)
-        else:
-            duty_cycle = 0 #stop signal send
-            self.get_logger().info("stop servo")    
+        self.timer.reset()
+        if not self.pwm_on:
+            #print('PWM awake')
+            self.pwm_on = True
 
-        self.pwm.ChangeDutyCycle(duty_cycle)
-
-
-    '''this function converts pulse width into duty cycle percent'''
-    def pusle_to_duty(self, pulse_us):
-        return (pulse_us / 20000) * 100 #convert 500-2500 microseconds to 0-100% duty cycle
-
-
+        self.pwm.ChangeDutyCycle(self.convertRangeToDutyCycle(msg.data))
 
     def destroy_node(self):
-        self.pwn.stop()
+        self.pwm.stop()
         GPIO.cleanup()
         super().destroy_node()
 
-
+    def convertRangeToDutyCycle(self, angle):
+        if (angle < MIN_RANGE or angle > MAX_RANGE):
+            print('Servo set out of bounds')
+            angle = INIT_RANGE
+        dc = (angle * (MAX_DC - MIN_DC) / MAX_RANGE) + MIN_DC
+        #print('Setting servo to %f' % (dc))
+        return dc
 
 def main(args=None):
     rclpy.init(args=args)
     node = CameraPan()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
