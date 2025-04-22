@@ -12,7 +12,7 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>pygame</exec_depend>
   <exec_depend>pysabertooth</exec_depend>
-  <exec_depend>RPi.GPIO</exec_depend>
+  <exec_depend>Jetson.GPIO</exec_depend>
   <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_copyright</test_depend>

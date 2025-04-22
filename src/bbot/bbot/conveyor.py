@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-import RPi.GPIO as GPIO
+import Jetson.GPIO as GPIO
 from std_msgs.msg import Int16
 
 class Conveyor(Node):
