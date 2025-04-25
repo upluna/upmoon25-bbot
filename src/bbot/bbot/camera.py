@@ -4,7 +4,7 @@ import Jetson.GPIO as GPIO
 from std_msgs.msg import Int16
 
 # Define the PWM pin
-PWM_PIN = 21
+PWM_PIN = 32
 
 # Servo PWM Specs
 PWM_FREQUENCY = 50  # 50Hz (20ms period)
@@ -22,7 +22,7 @@ class CameraHeight(Node):
 
         # Set GPIO pin number (BCM numbering)
         try:
-            GPIO.setmode(GPIO.BCM)
+            GPIO.setmode(GPIO.BOARD)
         except Exception:
             print('GPIO failure')
         try:

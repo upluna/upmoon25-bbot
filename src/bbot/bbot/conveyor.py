@@ -7,9 +7,9 @@ class Conveyor(Node):
     def __init__(self):
         super().__init__('conveyor')
 
-        # Set GPIO pin number (BCM numbering)
-        self.gpio_pin = 16 
-        GPIO.setmode(GPIO.BCM) #research on this GPIO
+        # Set GPIO pin number (pin numbering)
+        self.gpio_pin = 36 
+        GPIO.setmode(GPIO.BOARD) #research on this GPIO
         GPIO.setup(self.gpio_pin, GPIO.OUT)
 
         GPIO.output(self.gpio_pin, GPIO.HIGH)
