@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/rpi_launch.py']),
+        ('share/' + package_name + '/launch', ['launch/jet_launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -28,7 +28,8 @@ setup(
             'camera = bbot.camera:main',
             'bucket_spin = bbot.bucket_spin:main',
             'bbot_receiver_js = bbot.bbot_receiver_js:main',
-            'arduino_driver = bbot.arduino_driver:main'
+            'arduino_driver = bbot.arduino_driver:main',
+            'camera_pan = bbot.camera_pan:main',
         ],
     },
 )

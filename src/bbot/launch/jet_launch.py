@@ -33,4 +33,16 @@ def generate_launch_description():
             name='bucket_spin_node',
             output='screen'
         ),
+        Node(
+            package='bbot',
+            executable='camera_pan',
+            name='camera_pan_node',
+            output='screen'
+        ),
+        Node(
+            package='bbot',
+            executable='arduino_driver',
+            name='arduino_driver_node',
+            output='screen'
+        ),
     ])
