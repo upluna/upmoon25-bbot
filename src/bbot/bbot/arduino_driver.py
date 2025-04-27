@@ -2,7 +2,6 @@ import rclpy
 import serial
 import serial.tools.list_ports
 import subprocess
-import os
 
 from rclpy.node import Node
 from std_msgs.msg import Float32
@@ -47,9 +46,6 @@ class ArduinoDriver(Node):
 
 
     def flashHexFile(self, port, hex_file):
-        hex_path = os.path.join(os.path.dirname(__file__), '..', 'arduino', 'hex', hex_file)
-        hex_path = os.path.abspath(hex_path)
-
         avrdude_cmd = [
             'avrdude',
             '-v',
@@ -61,7 +57,7 @@ class ArduinoDriver(Node):
             f'-P{port}',
             '-b115200',
             '-D',
-            f'-Uflash:w:{hex_file}:i'
+            f'-Uflash:w:~/ros2/upmoon25-bbot/src/bbot/bbot/arduino/hex/{hex_file}:i'
         ]
 
         result = subprocess.run(avrdude_cmd, capture_output=True, text=True)
