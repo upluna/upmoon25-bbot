@@ -39,10 +39,10 @@ def generate_launch_description():
             name='camera_pan_node',
             output='screen'
         ),
-        Node(
-            package='bbot',
-            executable='arduino_driver',
-            name='arduino_driver_node',
-            output='screen'
-        ),
+        # Node(
+        #     package='bbot',
+        #     executable='arduino_driver',
+        #     name='arduino_driver_node',
+        #     output='screen'
+        # ),
     ])
