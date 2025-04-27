@@ -65,7 +65,8 @@ class ArduinoDriver(Node):
             self.get_logger().info("Flash succesful")
         else:
             self.get_logger().error("Flash failed!")
-            self.get_logger().error(result)
+            self.get_logger().error(f"STDOUT: {result.stdout}")
+            self.get_logger().error(f"STDERR: {result.stderr}")
             self.destroy_node()
 
     def findArduinoPort(self, arduino_vid='2341', arduino_pid='0043'):
