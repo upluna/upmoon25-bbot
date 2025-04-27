@@ -57,7 +57,7 @@ class ArduinoDriver(Node):
             f'-P{port}',
             '-b115200',
             '-D',
-            f'-Uflash:w:~/ros2/upmoon25-bbot/src/bbot/bbot/arduino/hex/{hex_file}:i'
+            f'-Uflash:w:home/upmoon25/ros2/upmoon25-bbot/src/bbot/bbot/arduino/hex/{hex_file}:i'
         ]
 
         result = subprocess.run(avrdude_cmd, capture_output=True, text=True)
