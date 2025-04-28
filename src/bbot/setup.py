@@ -30,6 +30,7 @@ setup(
             'bbot_receiver_js = bbot.bbot_receiver_js:main',
             'arduino_driver = bbot.arduino_driver:main',
             'camera_pan = bbot.camera_pan:main',
+            'encoders = bbot.encoders:main',
         ],
     },
 )

@@ -17,32 +17,14 @@ def generate_launch_description():
         ),
         Node(
             package='bbot',
-            executable='bucket_servos',
-            name='bucket_servos_node',
-            output='screen'
-        ),
-        Node(
-            package='bbot',
-            executable='camera',
-            name='camera_node',
-            output='screen'
-        ),
-        Node(
-            package='bbot',
             executable='bucket_spin',
             name='bucket_spin_node',
             output='screen'
         ),
         Node(
             package='bbot',
-            executable='camera_pan',
-            name='camera_pan_node',
+            executable='arduino_driver',
+            name='arduino_driver_node',
             output='screen'
         ),
-        # Node(
-        #     package='bbot',
-        #     executable='arduino_driver',
-        #     name='arduino_driver_node',
-        #     output='screen'
-        # ),
     ])
