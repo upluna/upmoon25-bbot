@@ -1,6 +1,6 @@
 #!/bin/bash
 echo Building ROS2 Package...
-colcon build --packages-select bbot
+sudo colcon build --packages-select bbot
 source install/setup.bash
 
 echo Launching Nodes...
