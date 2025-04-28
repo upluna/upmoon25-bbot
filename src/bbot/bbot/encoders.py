@@ -28,7 +28,7 @@ class EncoderReader(Node):
         GPIO.add_event_detect(self.pin_b, GPIO.BOTH, callback=self._update_encoder)
 
         # Publisher
-        self.encoder_pub = self.create_publisher(Int32, 'encoder_count', 10)
+        self.encoder_pub = self.create_publisher(Int32, 'sensor/encoder_rf', 10)
 
         # Timer to publish at a fixed rate
         self.timer = self.create_timer(0.1, self.publish_position)
