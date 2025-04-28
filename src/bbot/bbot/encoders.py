@@ -11,7 +11,7 @@ class EncoderReader(Node):
         super().__init__('encoder_reader')
 
         # GPIO pin configuration
-        self.pin_a = 17  # BCM numbering
+        self.pin_a = 16
         self.pin_b = 18
 
         # Encoder state
