@@ -16,14 +16,17 @@ from rclpy.executors import MultiThreadedExecutor
     IR sensors, and the camera servo.
 
     Subscriptions:
-    /cmd/pan: Int8 - +1 for pan left, -1 for pan right, 0 for stop
+    /cmd/pan:           Int8 - +1 for pan left, -1 for pan right, 0 for stop
+    /cmd/camera_height: Int16, 0 - 100 height percentage for the camera
+    /cmd/bucket_pos:    Int16, 0 - 100 extension percentage for the bucket
 
     Publishes:
     /sensor/ir/right - IR distance measure in centimeters
     /sensor/ir/left
 
     TF transforms:
-    actuator_link -> servo_link - describes camera rotation
+    actuator_base_link -> actuator_link - describes height of camera
+    actuator_link -> servo_link         - describes camera rotation
 '''
 
 DEBUG = True
@@ -53,6 +56,8 @@ class ArduinoDriver(Node):
         else:
             self.get_logger().error("Could not find arduino port!")
             self.destroy_node()
+            rclpy.shutdown()
+            return
 
         self.ser = serial.Serial(self.port, 115200, timeout=1)
         time.sleep(2)
@@ -74,7 +79,7 @@ class ArduinoDriver(Node):
         ]
 
         # Initialize subscribers
-        self.create_subscription(Int8, '/cmd/pan', self.onPan, 3, callback_group=sub_cb)
+        self.create_subscription(Int8,  '/cmd/pan', self.onPan, 3, callback_group=sub_cb)
         self.create_subscription(Int16, '/cmd/bucket_pos', self.onBucket, 10, callback_group=sub_cb)
         self.create_subscription(Int16, '/cmd/camera_height', self.onCam, 10, callback_group=sub_cb)
 
